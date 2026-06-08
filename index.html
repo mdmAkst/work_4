@@ -1,21 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
+    <title>С Новым Годом!</title>
     <link rel="stylesheet" href="style.css" />
-
-    <link
-      href="https://fonts.cdnfonts.com/css/seven-segment"
-      rel="stylesheet"
-    />
   </head>
-
   <body>
-    <script src="script.js"></script>
+    <h1>До Нового года осталось:</h1>
 
-    <div id="root"></div>
+    <div class="tree-container">
+      <!-- Скрытый чекбокс для гирлянды -->
+      <input type="checkbox" id="garland-toggle" hidden />
+
+      <!-- Ёлка -->
+      <div class="tree">
+        <!-- Звезда с таймером внутри -->
+        <div class="star-wrapper">
+          <div class="star">
+            <div id="timer" class="timer">
+              <div class="time-block">
+                <span id="days">00</span>
+                <div class="label">Дн</div>
+              </div>
+              <div class="time-block">
+                <span id="hours">00</span>
+                <div class="label">Чс</div>
+              </div>
+              <div class="time-block">
+                <span id="minutes">00</span>
+                <div class="label">Мин</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tree-part top"></div>
+        <div class="tree-part middle"></div>
+        <div class="tree-part bottom"></div>
+        <div class="trunk"></div>
+      </div>
+
+      <!-- Гирлянды (адаптированы под большую ёлку) -->
+      <label for="garland-toggle" class="garland garland-1"></label>
+      <label for="garland-toggle" class="garland garland-2"></label>
+      <label for="garland-toggle" class="garland garland-3"></label>
+      <label for="garland-toggle" class="garland garland-4"></label>
+
+      <!-- Животные китайского гороскопа на ёлке с индивидуальными звуками -->
+      <div class="animal animal-1" data-sound="sounds/dragon.mp3">🐉</div>
+      <div class="animal animal-2" data-sound="sounds/snake.mp3">🐍</div>
+      <div class="animal animal-3" data-sound="sounds/horse.mp3">🐎</div>
+      <div class="animal animal-4" data-sound="sounds/goat.mp3">🐐</div>
+      <div class="animal animal-5" data-sound="sounds/monkey.mp3">🐒</div>
+      <div class="animal animal-6" data-sound="sounds/rooster.mp3">🐓</div>
+      <div class="animal animal-7" data-sound="sounds/dog.mp3">🐶</div>
+
+      <!-- Подарки под ёлкой (добавлен атрибут data-video-id) -->
+      <div class="gift gift-1" data-video-id="efdN69QscAg">
+        <div class="surprise">🧸</div>
+        <div class="box">
+          <div class="ribbon-vertical"></div>
+          <div class="ribbon-horizontal"></div>
+        </div>
+        <div class="lid">
+          <div class="ribbon-vertical"></div>
+          <div class="ribbon-horizontal"></div>
+          <div class="bow"></div>
+        </div>
+      </div>
+      <div class="gift gift-2" data-video-id="dQw4w9WgXcQ">
+        <div class="surprise">🎮</div>
+        <div class="box">
+          <div class="ribbon-vertical"></div>
+          <div class="ribbon-horizontal"></div>
+        </div>
+        <div class="lid">
+          <div class="ribbon-vertical"></div>
+          <div class="ribbon-horizontal"></div>
+          <div class="bow"></div>
+        </div>
+      </div>
+      <div class="gift gift-3" data-video-id="3JZ_D3ELwOQ">
+        <div class="surprise">🍬</div>
+        <div class="box">
+          <div class="ribbon-vertical"></div>
+          <div class="ribbon-horizontal"></div>
+        </div>
+        <div class="lid">
+          <div class="ribbon-vertical"></div>
+          <div class="ribbon-horizontal"></div>
+          <div class="bow"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно для видео -->
+    <div id="video-modal" class="modal hidden">
+      <div class="modal-content">
+        <span id="close-modal" class="close-btn">&times;</span>
+        <div class="video-container">
+          <iframe
+            id="video-frame"
+            src=""
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
   </body>
 </html>

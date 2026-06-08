@@ -1,8 +1,416 @@
-#root {
-  font-family: "Seven Segment", sans-serif;
-  font-size: 80px;
+body {
+    background-color: #121220;
+    background-image: radial-gradient(circle at top, #1f1f3a, #121220);
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding-top: 40px;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: auto; /* Позволяет горизонтальную прокрутку на маленьких экранах */
 }
 
-.red {
-  color: red;
+h1 {
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #e0e0e0;
+}
+
+/* --- Огромная ёлка --- */
+.tree-container {
+    position: relative;
+    width: 800px;
+    height: 1500px; /* Большая высота для прокрутки */
+    margin: 100px auto 50px auto;
+}
+
+.tree-part {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: solid transparent;
+    border-right: solid transparent;
+    border-bottom: solid transparent;
+    filter: drop-shadow(0 15px 10px rgba(0,0,0,0.5));
+}
+
+/* Увеличенные ярусы ёлки */
+.tree-part.top { top: 200px; border-width: 0 200px 300px 200px; border-bottom-color: #1cd61c; z-index: 3; }
+.tree-part.middle { top: 400px; border-width: 0 300px 400px 300px; border-bottom-color: #0f9b0f; z-index: 2; }
+.tree-part.bottom { top: 700px; border-width: 0 400px 500px 400px; border-bottom-color: #0a700a; z-index: 1; }
+
+.trunk {
+    position: absolute;
+    top: 1180px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 200px;
+    background: linear-gradient(to right, #3b2313, #5c3a21, #3b2313);
+    z-index: 0;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+}
+
+/* --- Звезда с таймером --- */
+.star-wrapper {
+    position: absolute;
+    top: -100px; /* Сдвинули выше, чтобы компенсировать увеличенный размер */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    /* Свечение вокруг звезды */
+    filter: drop-shadow(0 0 30px #ffde00) drop-shadow(0 0 60px #ffaa00);
+}
+
+.star {
+    width: 500px; /* Увеличили размер звезды */
+    height: 500px;
+    background: #ffde00;
+    /* Форма звезды с помощью clip-path */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Компактный таймер внутри звезды --- */
+.timer {
+    display: flex; /* В одну строку */
+    justify-content: center;
+    gap: 8px;
+    margin-top: -40px; /* Отрицательный отступ, чтобы поднять таймер еще выше */
+}
+
+.time-block {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 6px;
+    border-radius: 8px;
+    min-width: 50px;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.time-block span {
+    font-size: 1.5rem; /* Уменьшили шрифт */
+    font-weight: bold;
+    color: #8b0000; /* Темно-красный для контраста с желтым */
+    display: block;
+}
+
+.time-block .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #555;
+    margin-top: 2px;
+}
+
+.happy-new-year {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #8b0000;
+    text-align: center;
+    margin-top: 40px;
+    line-height: 1.2;
+    animation: pulse 1.5s infinite;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* --- Гирлянды --- */
+.garland {
+    position: absolute;
+    border-bottom: 14px dotted #1a251a; /* Выключенные лампочки (темные) */
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 4;
+    transition: border-color 0.3s;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.6)); /* Тень для объема выключенных лампочек */
+}
+
+/* Провод гирлянды */
+.garland::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -5px;
+    right: -5px;
+    bottom: 6px; /* Центрируем провод ровно по середине 14px лампочек */
+    border-bottom: 2px solid #051005;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* Включение гирлянды */
+#garland-toggle:checked ~ .garland {
+    border-bottom-color: #ff4757; /* Базовый яркий цвет */
+}
+
+/* Разные скорости и направления для эффекта разнобоя */
+#garland-toggle:checked ~ .garland-1 { animation: twinkle 2.5s infinite linear; }
+#garland-toggle:checked ~ .garland-2 { animation: twinkle 3.2s infinite linear reverse; }
+#garland-toggle:checked ~ .garland-3 { animation: twinkle 2.8s infinite linear; }
+#garland-toggle:checked ~ .garland-4 { animation: twinkle 3.5s infinite linear reverse; }
+
+/* Магия переливания цветов и мерцания */
+@keyframes twinkle {
+    0% { filter: drop-shadow(0 0 8px #ff4757) drop-shadow(0 0 20px #ff4757) hue-rotate(0deg) brightness(1); }
+    25% { filter: drop-shadow(0 0 15px #ff4757) drop-shadow(0 0 35px #ff4757) hue-rotate(90deg) brightness(1.4); }
+    50% { filter: drop-shadow(0 0 8px #ff4757) drop-shadow(0 0 20px #ff4757) hue-rotate(180deg) brightness(1); }
+    75% { filter: drop-shadow(0 0 15px #ff4757) drop-shadow(0 0 35px #ff4757) hue-rotate(270deg) brightness(1.4); }
+    100% { filter: drop-shadow(0 0 8px #ff4757) drop-shadow(0 0 20px #ff4757) hue-rotate(360deg) brightness(1); }
+}
+
+.garland-1 { top: 400px; left: 280px; width: 240px; height: 60px; }
+.garland-2 { top: 650px; left: 200px; width: 400px; height: 100px; }
+.garland-3 { top: 950px; left: 150px; width: 500px; height: 130px; }
+.garland-4 { top: 1100px; left: 80px; width: 640px; height: 160px; }
+
+/* --- Животные на ёлке --- */
+.animal {
+    position: absolute;
+    font-size: 55px; /* Размер эмодзи */
+    cursor: pointer;
+    z-index: 5;
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5));
+    transition: transform 0.1s;
+    user-select: none; /* Чтобы текст не выделялся при быстрых кликах */
+}
+
+.animal:active { transform: scale(0.8); }
+
+.animal-1 { top: 420px; left: 380px; }
+.animal-2 { top: 680px; left: 250px; }
+.animal-3 { top: 700px; left: 500px; }
+.animal-4 { top: 980px; left: 200px; }
+.animal-5 { top: 950px; left: 550px; }
+.animal-6 { top: 1150px; left: 150px; }
+.animal-7 { top: 1120px; left: 600px; }
+
+/* --- Подарки --- */
+.gift {
+    position: absolute;
+    z-index: 6;
+    cursor: pointer;
+}
+
+/* Основная часть коробки */
+.gift .box {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    border-radius: 0 0 4px 4px;
+    box-shadow: -8px 8px 15px rgba(0,0,0,0.6);
+    z-index: 2;
+}
+
+/* Крышка коробки */
+.gift .lid {
+    position: absolute;
+    top: 0;
+    left: -5%;
+    width: 110%;
+    height: 25%;
+    border-radius: 4px;
+    box-shadow: -8px 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.4s ease-in-out;
+    z-index: 3;
+}
+
+/* Сюрприз внутри */
+.gift .surprise {
+    position: absolute;
+    bottom: 40%;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    font-size: 45px;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1; /* Прячется за передней стенкой коробки (.box) */
+}
+
+/* Анимация открытия */
+.gift.open .lid {
+    transform: translateY(-50px) rotate(15deg);
+}
+
+.gift.open .surprise {
+    transform: translateX(-50%) translateY(-70px) scale(1);
+}
+
+/* Ленты */
+.gift .ribbon-vertical {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15%;
+    z-index: 1;
+}
+
+.gift .ribbon-horizontal {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 15%;
+    z-index: 1;
+}
+
+.gift .lid .ribbon-horizontal {
+    height: 25%;
+}
+
+/* Бант */
+.gift .bow {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 20px;
+    z-index: 2;
+}
+
+.gift .bow::before, .gift .bow::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 4px solid;
+    border-radius: 50% 50% 0 50%;
+    top: 0;
+    box-sizing: border-box;
+}
+
+.gift .bow::before {
+    left: 0;
+    transform: rotate(45deg);
+}
+
+.gift .bow::after {
+    right: 0;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+}
+
+/* Подарок 1 (Желтый с красной лентой) */
+.gift-1 {
+    width: 110px;
+    height: 110px;
+    top: 1270px;
+    left: 260px;
+}
+.gift-1 .box, .gift-1 .lid { background: #f1c40f; }
+.gift-1 .ribbon-vertical, .gift-1 .ribbon-horizontal { background: #e74c3c; }
+.gift-1 .bow::before, .gift-1 .bow::after { border-color: #e74c3c; }
+
+/* Подарок 2 (Голубой с белой лентой) */
+.gift-2 {
+    width: 140px;
+    height: 90px;
+    top: 1290px;
+    left: 460px;
+}
+.gift-2 .box, .gift-2 .lid { background: #34ceeb; }
+.gift-2 .ribbon-vertical, .gift-2 .ribbon-horizontal { background: #ffffff; }
+.gift-2 .bow::before, .gift-2 .bow::after { border-color: #ffffff; }
+
+/* Подарок 3 (Розовый со светло-желтой лентой, на переднем плане) */
+.gift-3 {
+    width: 80px;
+    height: 100px;
+    top: 1310px;
+    left: 370px;
+    z-index: 7;
+}
+.gift-3 .box, .gift-3 .lid { background: #fd79a8; }
+.gift-3 .ribbon-vertical, .gift-3 .ribbon-horizontal { background: #ffeaa7; }
+.gift-3 .bow::before, .gift-3 .bow::after { border-color: #ffeaa7; }
+
+/* --- Модальное окно для видео --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    
+    /* Плавное появление только для темного фона */
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    background: #000;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    
+    /* Анимация выплывания из коробки (координаты задаются через JS) */
+    /* Убрали opacity: 0, чтобы окно было видно с самого начала полета */
+    transform: translate(var(--start-x, 0), var(--start-y, 0)) scale(0);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); /* Очень плавное замедление */
+}
+
+/* Когда модальное окно активно, контент увеличивается и встает по центру */
+.modal:not(.hidden) .modal-content {
+    transform: translate(0, 0) scale(1);
+}
+
+.close-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    font-size: 35px;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #ff4757;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* Пропорция 16:9 для YouTube */
+    height: 0;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
